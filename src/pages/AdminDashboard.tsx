@@ -3,8 +3,6 @@ import { motion } from "framer-motion";
 import { 
   LayoutDashboard, 
   FileText, 
-  Image, 
-  Settings, 
   LogOut, 
   Menu, 
   X,
@@ -13,62 +11,84 @@ import {
   Trash2,
   Save,
   Calendar,
-  Eye
+  Eye,
+  Check
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import evaLogo from "@/assets/eva-logo.png";
 
-// Mock data for news/actualités
-const initialNews = [
-  {
-    id: 1,
-    title: "Lancement du Pavillon Africain au SIAL 2026",
-    content: "Le Pavillon Africain sera présent au SIAL Canada 2026 pour mettre en valeur l'excellence africaine.",
-    date: "2025-01-15",
-    published: true,
-  },
-  {
-    id: 2,
-    title: "Nouvelle collaboration avec les artisans",
-    content: "Eva Managing annonce un partenariat stratégique avec les artisans africains pour le SIAL.",
-    date: "2025-01-10",
-    published: true,
-  },
-  {
-    id: 3,
-    title: "Inscriptions ouvertes pour les exposants",
-    content: "Les inscriptions pour le Pavillon Africain sont maintenant ouvertes. Réservez votre place !",
-    date: "2025-01-05",
-    published: false,
-  },
-];
+const SUPER_ADMIN_EMAIL = "j.ferjani@evamanaging.com";
+
+interface NewsItem {
+  id: string;
+  title: string;
+  content: string;
+  image_url: string | null;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
 
 const sidebarItems = [
   { icon: LayoutDashboard, label: "Tableau de bord", id: "dashboard" },
   { icon: FileText, label: "Actualités", id: "news" },
-  { icon: Image, label: "Médias", id: "media" },
-  { icon: Settings, label: "Paramètres", id: "settings" },
 ];
 
 const AdminDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeSection, setActiveSection] = useState("dashboard");
-  const [news, setNews] = useState(initialNews);
-  const [editingNews, setEditingNews] = useState<typeof initialNews[0] | null>(null);
+  const [news, setNews] = useState<NewsItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [editingNews, setEditingNews] = useState<Partial<NewsItem> | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   // Check authentication
   useEffect(() => {
-    const isAuth = sessionStorage.getItem("eva_admin_auth");
-    if (!isAuth) {
-      navigate("/admin");
-    }
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session || session.user.email !== SUPER_ADMIN_EMAIL) {
+        navigate("/admin");
+        return;
+      }
+      fetchNews();
+    };
+
+    checkAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!session || session.user.email !== SUPER_ADMIN_EMAIL) {
+        navigate("/admin");
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, [navigate]);
 
-  const handleLogout = () => {
-    sessionStorage.removeItem("eva_admin_auth");
+  const fetchNews = async () => {
+    setIsLoading(true);
+    const { data, error } = await supabase
+      .from("news_items")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Error fetching news:", error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de charger les actualités",
+        variant: "destructive",
+      });
+    } else {
+      setNews(data || []);
+    }
+    setIsLoading(false);
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     toast({
       title: "Déconnexion",
       description: "Vous avez été déconnecté avec succès",
@@ -76,27 +96,107 @@ const AdminDashboard = () => {
     navigate("/admin");
   };
 
-  const handleSaveNews = () => {
-    if (editingNews) {
-      if (editingNews.id) {
-        setNews(news.map(n => n.id === editingNews.id ? editingNews : n));
-      } else {
-        setNews([...news, { ...editingNews, id: Date.now() }]);
-      }
-      setEditingNews(null);
+  const handleSaveNews = async () => {
+    if (!editingNews || !editingNews.title || !editingNews.content) {
       toast({
-        title: "Sauvegardé",
-        description: "L'actualité a été sauvegardée avec succès",
+        title: "Erreur",
+        description: "Veuillez remplir le titre et le contenu",
+        variant: "destructive",
       });
+      return;
+    }
+
+    if (editingNews.id) {
+      // Update existing
+      const { error } = await supabase
+        .from("news_items")
+        .update({
+          title: editingNews.title,
+          content: editingNews.content,
+          image_url: editingNews.image_url,
+          published_at: editingNews.published_at,
+        })
+        .eq("id", editingNews.id);
+
+      if (error) {
+        toast({
+          title: "Erreur",
+          description: "Impossible de mettre à jour l'actualité",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Sauvegardé",
+          description: "L'actualité a été mise à jour",
+        });
+        fetchNews();
+        setEditingNews(null);
+      }
+    } else {
+      // Create new
+      const { error } = await supabase
+        .from("news_items")
+        .insert({
+          title: editingNews.title,
+          content: editingNews.content,
+          image_url: editingNews.image_url,
+          published_at: editingNews.published_at,
+        });
+
+      if (error) {
+        toast({
+          title: "Erreur",
+          description: "Impossible de créer l'actualité",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Créé",
+          description: "L'actualité a été créée avec succès",
+        });
+        fetchNews();
+        setEditingNews(null);
+      }
     }
   };
 
-  const handleDeleteNews = (id: number) => {
-    setNews(news.filter(n => n.id !== id));
-    toast({
-      title: "Supprimé",
-      description: "L'actualité a été supprimée",
-    });
+  const handleDeleteNews = async (id: string) => {
+    const { error } = await supabase
+      .from("news_items")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      toast({
+        title: "Erreur",
+        description: "Impossible de supprimer l'actualité",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Supprimé",
+        description: "L'actualité a été supprimée",
+      });
+      fetchNews();
+    }
+  };
+
+  const togglePublish = async (item: NewsItem) => {
+    const newPublishedAt = item.published_at ? null : new Date().toISOString();
+    const { error } = await supabase
+      .from("news_items")
+      .update({ published_at: newPublishedAt })
+      .eq("id", item.id);
+
+    if (error) {
+      toast({
+        title: "Erreur",
+        description: "Impossible de modifier le statut",
+        variant: "destructive",
+      });
+    } else {
+      fetchNews();
+    }
   };
 
   const renderContent = () => {
@@ -104,47 +204,54 @@ const AdminDashboard = () => {
       case "dashboard":
         return (
           <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Tableau de bord</h2>
+            <h2 className="font-serif text-2xl text-foreground">Tableau de bord</h2>
             
             {/* Stats Cards */}
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
-                { label: "Actualités", value: news.length, color: "from-primary to-secondary" },
-                { label: "Publiées", value: news.filter(n => n.published).length, color: "from-green-500 to-emerald-500" },
-                { label: "Brouillons", value: news.filter(n => !n.published).length, color: "from-amber-500 to-orange-500" },
-                { label: "Ce mois", value: news.filter(n => new Date(n.date).getMonth() === new Date().getMonth()).length, color: "from-blue-500 to-cyan-500" },
+                { label: "Total actualités", value: news.length },
+                { label: "Publiées", value: news.filter(n => n.published_at).length },
+                { label: "Brouillons", value: news.filter(n => !n.published_at).length },
               ].map((stat, i) => (
                 <motion.div
                   key={stat.label}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
-                  className="card-modern p-6"
+                  className="border border-border/30 p-6"
                 >
-                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center text-white font-bold text-xl mb-4`}>
+                  <div className="text-4xl font-serif text-primary mb-2">
                     {stat.value}
                   </div>
-                  <h3 className="font-medium text-muted-foreground">{stat.label}</h3>
+                  <h3 className="text-sm uppercase tracking-wider text-foreground/60">{stat.label}</h3>
                 </motion.div>
               ))}
             </div>
 
             {/* Recent News */}
-            <div className="card-modern p-6">
-              <h3 className="font-semibold mb-4">Dernières actualités</h3>
-              <div className="space-y-3">
-                {news.slice(0, 3).map(item => (
-                  <div key={item.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-xl">
-                    <div>
-                      <h4 className="font-medium">{item.title}</h4>
-                      <span className="text-sm text-muted-foreground">{item.date}</span>
+            <div className="border border-border/30 p-6">
+              <h3 className="font-serif text-lg mb-4">Dernières actualités</h3>
+              {isLoading ? (
+                <p className="text-foreground/60">Chargement...</p>
+              ) : news.length === 0 ? (
+                <p className="text-foreground/60">Aucune actualité pour le moment</p>
+              ) : (
+                <div className="space-y-3">
+                  {news.slice(0, 5).map(item => (
+                    <div key={item.id} className="flex items-center justify-between p-3 bg-background/50 border border-border/20">
+                      <div>
+                        <h4 className="font-medium">{item.title}</h4>
+                        <span className="text-sm text-foreground/50">
+                          {new Date(item.created_at).toLocaleDateString('fr-FR')}
+                        </span>
+                      </div>
+                      <span className={`px-2 py-1 text-xs ${item.published_at ? 'bg-primary/20 text-primary' : 'bg-foreground/10 text-foreground/60'}`}>
+                        {item.published_at ? 'Publié' : 'Brouillon'}
+                      </span>
                     </div>
-                    <span className={`px-2 py-1 rounded-full text-xs ${item.published ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
-                      {item.published ? 'Publié' : 'Brouillon'}
-                    </span>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         );
@@ -153,12 +260,12 @@ const AdminDashboard = () => {
         return (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold">Gestion des actualités</h2>
+              <h2 className="font-serif text-2xl text-foreground">Gestion des actualités</h2>
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => setEditingNews({ id: 0, title: "", content: "", date: new Date().toISOString().split('T')[0], published: false })}
-                className="btn-primary flex items-center gap-2 text-sm"
+                onClick={() => setEditingNews({ title: "", content: "", image_url: null, published_at: null })}
+                className="btn-editorial-filled flex items-center gap-2 text-sm"
               >
                 <Plus size={18} />
                 Nouvelle actualité
@@ -170,56 +277,58 @@ const AdminDashboard = () => {
               <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="card-modern p-6"
+                className="border border-border/30 p-6"
               >
-                <h3 className="font-semibold mb-4">
+                <h3 className="font-serif text-lg mb-4">
                   {editingNews.id ? "Modifier l'actualité" : "Nouvelle actualité"}
                 </h3>
                 
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">Titre</label>
+                    <label className="block text-sm uppercase tracking-wider text-foreground/70 mb-2">Titre</label>
                     <input
                       type="text"
-                      value={editingNews.title}
+                      value={editingNews.title || ""}
                       onChange={(e) => setEditingNews({ ...editingNews, title: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      className="w-full px-4 py-3 border border-border bg-background focus:outline-none focus:border-primary"
                       placeholder="Titre de l'actualité"
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium mb-2">Contenu</label>
+                    <label className="block text-sm uppercase tracking-wider text-foreground/70 mb-2">Contenu</label>
                     <textarea
-                      value={editingNews.content}
+                      value={editingNews.content || ""}
                       onChange={(e) => setEditingNews({ ...editingNews, content: e.target.value })}
-                      rows={4}
-                      className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+                      rows={6}
+                      className="w-full px-4 py-3 border border-border bg-background focus:outline-none focus:border-primary resize-none"
                       placeholder="Contenu de l'actualité"
                     />
                   </div>
+
+                  <div>
+                    <label className="block text-sm uppercase tracking-wider text-foreground/70 mb-2">URL de l'image (optionnel)</label>
+                    <input
+                      type="url"
+                      value={editingNews.image_url || ""}
+                      onChange={(e) => setEditingNews({ ...editingNews, image_url: e.target.value })}
+                      className="w-full px-4 py-3 border border-border bg-background focus:outline-none focus:border-primary"
+                      placeholder="https://..."
+                    />
+                  </div>
                   
-                  <div className="flex items-center gap-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Date</label>
-                      <input
-                        type="date"
-                        value={editingNews.date}
-                        onChange={(e) => setEditingNews({ ...editingNews, date: e.target.value })}
-                        className="px-4 py-3 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
-                      />
-                    </div>
-                    
-                    <div className="flex items-center gap-2 pt-7">
-                      <input
-                        type="checkbox"
-                        id="published"
-                        checked={editingNews.published}
-                        onChange={(e) => setEditingNews({ ...editingNews, published: e.target.checked })}
-                        className="w-5 h-5 rounded border-border"
-                      />
-                      <label htmlFor="published" className="text-sm font-medium">Publier immédiatement</label>
-                    </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="published"
+                      checked={!!editingNews.published_at}
+                      onChange={(e) => setEditingNews({ 
+                        ...editingNews, 
+                        published_at: e.target.checked ? new Date().toISOString() : null 
+                      })}
+                      className="w-5 h-5"
+                    />
+                    <label htmlFor="published" className="text-sm">Publier immédiatement</label>
                   </div>
                   
                   <div className="flex gap-3 pt-4">
@@ -227,14 +336,14 @@ const AdminDashboard = () => {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={handleSaveNews}
-                      className="btn-primary flex items-center gap-2"
+                      className="btn-editorial-filled flex items-center gap-2"
                     >
                       <Save size={18} />
                       Sauvegarder
                     </motion.button>
                     <button
                       onClick={() => setEditingNews(null)}
-                      className="px-6 py-3 rounded-xl border border-border hover:bg-muted transition-colors"
+                      className="btn-editorial"
                     >
                       Annuler
                     </button>
@@ -244,80 +353,66 @@ const AdminDashboard = () => {
             )}
 
             {/* News List */}
-            <div className="space-y-4">
-              {news.map((item, index) => (
-                <motion.div
-                  key={item.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  className="card-modern p-5"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="font-semibold">{item.title}</h3>
-                        <span className={`px-2 py-0.5 rounded-full text-xs ${item.published ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
-                          {item.published ? 'Publié' : 'Brouillon'}
-                        </span>
+            {isLoading ? (
+              <p className="text-foreground/60">Chargement...</p>
+            ) : news.length === 0 ? (
+              <div className="border border-border/30 p-12 text-center">
+                <FileText className="w-12 h-12 mx-auto mb-4 text-foreground/30" />
+                <p className="text-foreground/60">Aucune actualité pour le moment</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {news.map((item, index) => (
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    className="border border-border/30 p-5"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="font-serif text-lg">{item.title}</h3>
+                          <span className={`px-2 py-0.5 text-xs ${item.published_at ? 'bg-primary/20 text-primary' : 'bg-foreground/10 text-foreground/60'}`}>
+                            {item.published_at ? 'Publié' : 'Brouillon'}
+                          </span>
+                        </div>
+                        <p className="text-sm text-foreground/60 mb-2 line-clamp-2">{item.content}</p>
+                        <div className="flex items-center gap-2 text-xs text-foreground/40">
+                          <Calendar size={14} />
+                          {new Date(item.created_at).toLocaleDateString('fr-FR')}
+                        </div>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-2">{item.content}</p>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <Calendar size={14} />
-                        {item.date}
+                      
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => togglePublish(item)}
+                          className={`p-2 transition-colors ${item.published_at ? 'text-primary hover:bg-primary/10' : 'hover:bg-foreground/10'}`}
+                          title={item.published_at ? "Dépublier" : "Publier"}
+                        >
+                          <Check size={18} />
+                        </button>
+                        <button
+                          onClick={() => setEditingNews(item)}
+                          className="p-2 hover:bg-foreground/10 transition-colors"
+                          title="Modifier"
+                        >
+                          <Edit3 size={18} />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteNews(item.id)}
+                          className="p-2 hover:bg-destructive/10 text-destructive transition-colors"
+                          title="Supprimer"
+                        >
+                          <Trash2 size={18} />
+                        </button>
                       </div>
                     </div>
-                    
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => setEditingNews(item)}
-                        className="p-2 rounded-lg hover:bg-muted transition-colors"
-                        title="Modifier"
-                      >
-                        <Edit3 size={18} />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteNews(item.id)}
-                        className="p-2 rounded-lg hover:bg-destructive/10 text-destructive transition-colors"
-                        title="Supprimer"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        );
-
-      case "media":
-        return (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Gestion des médias</h2>
-            <div className="card-modern p-12 text-center">
-              <Image className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-              <h3 className="font-semibold mb-2">Bibliothèque de médias</h3>
-              <p className="text-muted-foreground mb-6">
-                Téléchargez et gérez les images et documents du site.
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Cette fonctionnalité nécessite l'activation de Lovable Cloud pour le stockage.
-              </p>
-            </div>
-          </div>
-        );
-
-      case "settings":
-        return (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold">Paramètres</h2>
-            <div className="card-modern p-6">
-              <h3 className="font-semibold mb-4">Informations du site</h3>
-              <p className="text-muted-foreground">
-                Les paramètres avancés seront disponibles après l'activation de Lovable Cloud.
-              </p>
-            </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
           </div>
         );
 
@@ -327,21 +422,21 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-muted/30 flex">
+    <div className="min-h-screen bg-background flex">
       {/* Sidebar */}
       <aside
-        className={`fixed lg:static inset-y-0 left-0 z-50 w-64 bg-card border-r border-border transform transition-transform duration-300 ${
+        className={`fixed lg:static inset-y-0 left-0 z-50 w-64 bg-card border-r border-border/30 transform transition-transform duration-300 ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
       >
         <div className="h-full flex flex-col">
           {/* Logo */}
-          <div className="p-6 border-b border-border">
+          <div className="p-6 border-b border-border/30">
             <a href="/" className="flex items-center gap-3">
               <img src={evaLogo} alt="Eva Managing" className="h-10" />
               <div>
-                <span className="font-space font-bold block">Eva Admin</span>
-                <span className="text-xs text-muted-foreground">Panneau de contrôle</span>
+                <span className="font-serif block">Eva Admin</span>
+                <span className="text-xs text-foreground/50">Panneau de contrôle</span>
               </div>
             </a>
           </div>
@@ -352,10 +447,10 @@ const AdminDashboard = () => {
               <button
                 key={item.id}
                 onClick={() => setActiveSection(item.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
+                className={`w-full flex items-center gap-3 px-4 py-3 transition-colors ${
                   activeSection === item.id
-                    ? "bg-gradient-primary text-white"
-                    : "hover:bg-muted"
+                    ? "bg-primary text-background"
+                    : "hover:bg-foreground/5"
                 }`}
               >
                 <item.icon size={20} />
@@ -365,10 +460,10 @@ const AdminDashboard = () => {
           </nav>
 
           {/* Logout */}
-          <div className="p-4 border-t border-border">
+          <div className="p-4 border-t border-border/30">
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-destructive hover:bg-destructive/10 transition-colors"
+              className="w-full flex items-center gap-3 px-4 py-3 text-destructive hover:bg-destructive/10 transition-colors"
             >
               <LogOut size={20} />
               Se déconnecter
@@ -380,21 +475,21 @@ const AdminDashboard = () => {
       {/* Main Content */}
       <main className="flex-1 min-h-screen">
         {/* Top bar */}
-        <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border p-4">
+        <header className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border/30 p-4">
           <div className="flex items-center justify-between">
             <button
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="lg:hidden p-2 rounded-lg hover:bg-muted"
+              className="lg:hidden p-2 hover:bg-foreground/5"
             >
               {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
             
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 ml-auto">
               <a
                 href="/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className="flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground transition-colors"
               >
                 <Eye size={18} />
                 Voir le site
