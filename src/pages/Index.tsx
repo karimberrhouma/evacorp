@@ -5,6 +5,7 @@ import AfricanTreasures from "@/components/AfricanTreasures";
 import FAQ from "@/components/FAQ";
 import ForumInscription from "@/components/ForumInscription";
 import Contact from "@/components/Contact";
+import Founder from "@/components/Founder";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -15,6 +16,7 @@ const Index = () => {
       <Services />
       <AfricanTreasures />
       <ForumInscription />
+      <Founder />
       <FAQ />
       <Contact />
       <Footer />
