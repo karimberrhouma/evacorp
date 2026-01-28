@@ -1,32 +1,24 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import evaLogo from "@/assets/eva-logo.png";
 
 const navLinks = [
   { name: "Accueil", href: "#home" },
-  { name: "Nos Services", href: "#services" },
-  { name: "Nos Événements", href: "#events" },
-  { 
-    name: "Investir", 
-    href: "#invest",
-    subLinks: [
-      { name: "Pavillon Africain", href: "#pavilion" },
-      { name: "SIAL Canada 2026", href: "#sial" },
-    ]
-  },
+  { name: "Services", href: "#services" },
+  { name: "Événements", href: "#events" },
+  { name: "Formulaire", href: "#inscription" },
   { name: "Contact", href: "#contact" },
 ];
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -44,101 +36,55 @@ const Navbar = () => {
 
   return (
     <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.8, delay: 0.5 }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
         isScrolled
-          ? "glass py-3"
-          : "bg-transparent py-5"
+          ? "bg-background/95 backdrop-blur-md py-4 border-b border-border/30"
+          : "bg-transparent py-6"
       }`}
     >
-      <div className="container mx-auto px-4 lg:px-8">
+      <div className="container mx-auto px-6 lg:px-12">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center group">
+          <Link to="/" className="relative z-10">
             <motion.img
               src={evaLogo}
               alt="Eva Managing"
-              className="h-12 md:h-14 w-auto object-contain"
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.2 }}
+              className="h-10 md:h-12 w-auto"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.3 }}
             />
           </Link>
 
-          {/* Desktop Navigation - Always visible */}
-          <div className="hidden md:flex items-center gap-6 lg:gap-8">
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center gap-10">
             {navLinks.map((link) => (
-              <div
+              <button
                 key={link.name}
-                className="relative"
-                onMouseEnter={() => link.subLinks && setActiveDropdown(link.name)}
-                onMouseLeave={() => setActiveDropdown(null)}
+                onClick={() => scrollToSection(link.href)}
+                className="nav-editorial underline-editorial py-2"
               >
-                <button
-                  onClick={() => scrollToSection(link.href)}
-                  className="nav-link flex items-center gap-1 py-2 text-sm lg:text-base"
-                >
-                  {link.name}
-                  {link.subLinks && (
-                    <ChevronDown
-                      className={`w-4 h-4 transition-transform duration-200 ${
-                        activeDropdown === link.name ? "rotate-180" : ""
-                      }`}
-                    />
-                  )}
-                </button>
-                
-                {/* Dropdown Menu */}
-                <AnimatePresence>
-                  {link.subLinks && activeDropdown === link.name && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      transition={{ duration: 0.2 }}
-                      className="absolute top-full left-0 pt-2"
-                    >
-                      <div className="glass rounded-xl p-2 min-w-[200px]">
-                        {link.subLinks.map((subLink) => (
-                          <button
-                            key={subLink.name}
-                            onClick={() => scrollToSection(subLink.href)}
-                            className="block w-full text-left px-4 py-2.5 rounded-lg text-sm hover:bg-primary/20 hover:text-primary transition-colors duration-200"
-                          >
-                            {subLink.name}
-                          </button>
-                        ))}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                {link.name}
+              </button>
             ))}
           </div>
 
-          {/* CTA Buttons */}
-          <div className="hidden md:flex items-center gap-4">
+          {/* Admin Link */}
+          <div className="hidden lg:block">
             <Link
               to="/admin"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className="nav-editorial underline-editorial py-2"
             >
               Admin
             </Link>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => scrollToSection("#inscription")}
-              className="btn-primary text-sm"
-            >
-              Formulaire
-            </motion.button>
           </div>
 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-muted transition-colors"
+            className="lg:hidden p-2 text-foreground"
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -149,51 +95,32 @@ const Navbar = () => {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden glass border-t border-border"
+            className="lg:hidden absolute top-full left-0 right-0 bg-background border-b border-border"
           >
-            <div className="container mx-auto px-4 py-6 space-y-4">
-              {navLinks.map((link) => (
-                <div key={link.name}>
-                  <button
-                    onClick={() => scrollToSection(link.href)}
-                    className="block w-full text-left py-2 font-medium hover:text-primary transition-colors"
-                  >
-                    {link.name}
-                  </button>
-                  {link.subLinks && (
-                    <div className="pl-4 mt-2 space-y-2">
-                      {link.subLinks.map((subLink) => (
-                        <button
-                          key={subLink.name}
-                          onClick={() => scrollToSection(subLink.href)}
-                          className="block w-full text-left py-1.5 text-sm text-muted-foreground hover:text-primary transition-colors"
-                        >
-                          {subLink.name}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+            <div className="container mx-auto px-6 py-8 space-y-6">
+              {navLinks.map((link, index) => (
+                <motion.button
+                  key={link.name}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  onClick={() => scrollToSection(link.href)}
+                  className="block w-full text-left nav-editorial py-2"
+                >
+                  {link.name}
+                </motion.button>
               ))}
-              <div className="pt-4 border-t border-border space-y-3">
-                <Link
-                  to="/admin"
-                  className="block text-sm text-muted-foreground hover:text-foreground"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Admin
-                </Link>
-                <button
-                  onClick={() => scrollToSection("#inscription")}
-                  className="btn-primary w-full text-center text-sm"
-                >
-                  Formulaire
-                </button>
-              </div>
+              <Link
+                to="/admin"
+                className="block nav-editorial py-2"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Admin
+              </Link>
             </div>
           </motion.div>
         )}
