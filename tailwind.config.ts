@@ -14,8 +14,12 @@ export default {
     },
     extend: {
       fontFamily: {
-        outfit: ["Outfit", "system-ui", "sans-serif"],
-        space: ["Space Grotesk", "system-ui", "sans-serif"],
+        serif: ["Cormorant Garamond", "Georgia", "serif"],
+        sans: ["Montserrat", "system-ui", "sans-serif"],
+      },
+      letterSpacing: {
+        widest: "0.2em",
+        ultra: "0.3em",
       },
       colors: {
         border: "hsl(var(--border))",
