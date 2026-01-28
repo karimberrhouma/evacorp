@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import evaLogo from "@/assets/eva-logo.png";
 
 const navLinks = [
-  { name: "Accueil", href: "/" },
+  { name: "Accueil", href: "#home" },
   { name: "Nos Services", href: "#services" },
   { name: "Nos Événements", href: "#events" },
   { 
@@ -49,14 +49,14 @@ const Navbar = () => {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled
-          ? "bg-background/95 backdrop-blur-xl shadow-md py-3"
+          ? "glass py-3"
           : "bg-transparent py-5"
       }`}
     >
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
+          <Link to="/" className="flex items-center group">
             <motion.img
               src={evaLogo}
               alt="Eva Managing"
@@ -64,18 +64,10 @@ const Navbar = () => {
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.2 }}
             />
-            <div className="hidden md:flex flex-col">
-              <span className="font-space font-bold text-xl text-gradient">
-                Eva Managing
-              </span>
-              <span className="text-xs text-muted-foreground">
-                Agence d'organisation d'événements
-              </span>
-            </div>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-8">
+          {/* Desktop Navigation - Always visible */}
+          <div className="hidden md:flex items-center gap-6 lg:gap-8">
             {navLinks.map((link) => (
               <div
                 key={link.name}
@@ -85,7 +77,7 @@ const Navbar = () => {
               >
                 <button
                   onClick={() => scrollToSection(link.href)}
-                  className="nav-link flex items-center gap-1 py-2"
+                  className="nav-link flex items-center gap-1 py-2 text-sm lg:text-base"
                 >
                   {link.name}
                   {link.subLinks && (
@@ -107,12 +99,12 @@ const Navbar = () => {
                       transition={{ duration: 0.2 }}
                       className="absolute top-full left-0 pt-2"
                     >
-                      <div className="bg-card rounded-xl shadow-lg border border-border/50 p-2 min-w-[200px]">
+                      <div className="glass rounded-xl p-2 min-w-[200px]">
                         {link.subLinks.map((subLink) => (
                           <button
                             key={subLink.name}
                             onClick={() => scrollToSection(subLink.href)}
-                            className="block w-full text-left px-4 py-2.5 rounded-lg text-sm hover:bg-muted transition-colors duration-200"
+                            className="block w-full text-left px-4 py-2.5 rounded-lg text-sm hover:bg-primary/20 hover:text-primary transition-colors duration-200"
                           >
                             {subLink.name}
                           </button>
@@ -126,7 +118,7 @@ const Navbar = () => {
           </div>
 
           {/* CTA Buttons */}
-          <div className="hidden lg:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-4">
             <Link
               to="/admin"
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
@@ -139,14 +131,14 @@ const Navbar = () => {
               onClick={() => scrollToSection("#inscription")}
               className="btn-primary text-sm"
             >
-              Inscription SIAL
+              Formulaire
             </motion.button>
           </div>
 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden p-2 rounded-lg hover:bg-muted transition-colors"
+            className="md:hidden p-2 rounded-lg hover:bg-muted transition-colors"
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -161,7 +153,7 @@ const Navbar = () => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="lg:hidden bg-background border-t border-border"
+            className="md:hidden glass border-t border-border"
           >
             <div className="container mx-auto px-4 py-6 space-y-4">
               {navLinks.map((link) => (
@@ -199,7 +191,7 @@ const Navbar = () => {
                   onClick={() => scrollToSection("#inscription")}
                   className="btn-primary w-full text-center text-sm"
                 >
-                  Inscription SIAL
+                  Formulaire
                 </button>
               </div>
             </div>

@@ -20,9 +20,8 @@ const AdminLogin = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // Temporary hardcoded credentials for demo
-  // In production, this should use proper authentication via Lovable Cloud
-  const DEMO_EMAIL = "admin@evamanaging.com";
+  // Super admin credentials
+  const DEMO_EMAIL = "j.ferjani@evamanaging.com";
   const DEMO_PASSWORD = "admin123";
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -74,12 +73,11 @@ const AdminLogin = () => {
             </p>
           </div>
 
-          {/* Demo credentials notice */}
-          <div className="bg-primary/10 rounded-xl p-4 mb-6">
+          {/* Credentials notice */}
+          <div className="glass border border-primary/30 rounded-xl p-4 mb-6">
             <p className="text-sm text-center">
-              <span className="font-medium">Identifiants de démonstration :</span><br />
-              Email: admin@evamanaging.com<br />
-              Mot de passe: admin123
+              <span className="font-medium text-primary">Super Admin</span><br />
+              <span className="text-muted-foreground">Email: j.ferjani@evamanaging.com</span>
             </p>
           </div>
 

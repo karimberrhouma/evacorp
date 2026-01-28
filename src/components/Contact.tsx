@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import { Mail, Phone, MapPin, Send, Building2 } from "lucide-react";
+import { Mail, Phone, MapPin, Send, Building2, MessageSquare } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const contactInfo = [
@@ -44,7 +44,6 @@ const Contact = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // For now, just show a toast
     toast({
       title: "Message envoyé !",
       description: "Nous vous répondrons dans les plus brefs délais.",
@@ -61,12 +60,15 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="section-padding bg-muted/30 relative overflow-hidden">
+    <section id="contact" className="section-padding relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[150px]" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px]" />
       </div>
+
+      {/* Decorative line */}
+      <div className="absolute top-0 left-0 right-0 glow-line" />
 
       <div className="container mx-auto px-4 lg:px-8 relative z-10" ref={ref}>
         {/* Header */}
@@ -76,15 +78,21 @@ const Contact = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="inline-block text-sm font-medium text-primary tracking-wide uppercase mb-4">
-            Contact
-          </span>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-primary/30 mb-6"
+          >
+            <MessageSquare className="w-4 h-4 text-primary" />
+            <span className="text-sm font-medium text-primary">Contact</span>
+          </motion.div>
+          
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
             Contactez-nous <span className="text-gradient">aujourd'hui</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Vous avez une question, une suggestion, ou vous voulez simplement nous dire bonjour ? 
-            Nous sommes là et nous serions ravis de vous entendre !
+            Vous avez une question ou un projet ? Nous serions ravis de vous entendre !
           </p>
         </motion.div>
 
@@ -102,10 +110,10 @@ const Contact = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
-                className="card-modern p-6"
+                className="card-glow p-6"
               >
                 <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-xl bg-gradient-primary text-white shrink-0">
+                  <div className="p-3 rounded-xl bg-gradient-primary text-white shrink-0 shadow-glow">
                     <info.icon size={22} />
                   </div>
                   <div>
@@ -131,13 +139,12 @@ const Contact = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={isInView ? { opacity: 1, scale: 1 } : {}}
               transition={{ duration: 0.6, delay: 0.6 }}
-              className="bg-gradient-primary rounded-3xl p-8 text-white"
+              className="bg-gradient-primary rounded-3xl p-8 text-white shadow-glow"
             >
               <Building2 className="w-10 h-10 mb-4" />
               <h4 className="font-bold text-xl mb-2">Nos bureaux internationaux</h4>
               <p className="text-white/80 text-sm">
-                Présents au Canada et en Tunisie pour mieux vous accompagner 
-                dans vos projets d'événements.
+                Présents au Canada et en Tunisie pour mieux vous accompagner.
               </p>
             </motion.div>
           </motion.div>
@@ -149,7 +156,7 @@ const Contact = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="lg:col-span-3"
           >
-            <form onSubmit={handleSubmit} className="card-modern p-8">
+            <form onSubmit={handleSubmit} className="card-glow p-8">
               <h3 className="text-2xl font-bold mb-6">Envoyez-nous un message</h3>
               
               <div className="grid sm:grid-cols-2 gap-6 mb-6">
@@ -164,7 +171,7 @@ const Contact = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                    className="w-full px-4 py-3 rounded-xl border border-border bg-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
                     placeholder="Votre nom"
                   />
                 </div>
@@ -179,7 +186,7 @@ const Contact = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                    className="w-full px-4 py-3 rounded-xl border border-border bg-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
                     placeholder="votre@email.com"
                   />
                 </div>
@@ -196,7 +203,7 @@ const Contact = () => {
                   value={formData.subject}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                  className="w-full px-4 py-3 rounded-xl border border-border bg-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
                   placeholder="Le sujet de votre message"
                 />
               </div>
@@ -212,7 +219,7 @@ const Contact = () => {
                   onChange={handleChange}
                   required
                   rows={5}
-                  className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all resize-none"
+                  className="w-full px-4 py-3 rounded-xl border border-border bg-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all resize-none"
                   placeholder="Votre message..."
                 />
               </div>

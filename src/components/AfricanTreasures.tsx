@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
+import { Globe2 } from "lucide-react";
 import agricultureImage from "@/assets/african-agriculture.jpg";
 import craftsImage from "@/assets/african-crafts.jpg";
 import cuisineImage from "@/assets/african-cuisine.jpg";
@@ -55,12 +56,20 @@ const AfricanTreasures = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section id="events" className="section-padding bg-muted/30 relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/10 rounded-full blur-3xl" />
+    <section id="events" className="section-padding relative overflow-hidden">
+      {/* Background effects */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[150px]" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[150px]" />
       </div>
+
+      {/* Grid overlay */}
+      <div className="absolute inset-0 opacity-[0.02]" 
+        style={{
+          backgroundImage: `linear-gradient(hsl(var(--primary)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary)) 1px, transparent 1px)`,
+          backgroundSize: '80px 80px'
+        }}
+      />
 
       <div className="container mx-auto px-4 lg:px-8 relative z-10" ref={ref}>
         {/* Section Header */}
@@ -70,17 +79,23 @@ const AfricanTreasures = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="inline-block text-sm font-medium text-primary tracking-wide uppercase mb-4">
-            Patrimoine Africain
-          </span>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-primary/30 mb-6"
+          >
+            <Globe2 className="w-4 h-4 text-primary" />
+            <span className="text-sm font-medium text-primary">Patrimoine Africain</span>
+          </motion.div>
+          
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
             Trésors culturels et artisanaux{" "}
             <span className="text-gradient">de l'Afrique</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             L'Afrique regorge de trésors uniques : artisanat traditionnel, traditions 
-            artisanales authentiques et cuisine aux saveurs ancestrales. Chaque création 
-            et chaque plat racontent l'histoire, la culture et la créativité de ses terres.
+            authentiques et cuisine aux saveurs ancestrales.
           </p>
         </motion.div>
 
@@ -94,7 +109,7 @@ const AfricanTreasures = () => {
               transition={{ duration: 0.6, delay: 0.2 + index * 0.15 }}
               className="group"
             >
-              <div className="card-modern overflow-hidden h-full">
+              <div className="card-glow overflow-hidden h-full">
                 {/* Image Container */}
                 <div className="relative h-56 overflow-hidden">
                   <motion.img
@@ -102,14 +117,14 @@ const AfricanTreasures = () => {
                     alt={treasure.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-foreground/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
                   
                   {/* Title overlay */}
                   <div className="absolute bottom-4 left-4 right-4">
-                    <span className="inline-block px-3 py-1 bg-gradient-primary text-white text-xs font-medium rounded-full mb-2">
+                    <span className="inline-block px-3 py-1 bg-gradient-primary text-white text-xs font-medium rounded-full mb-2 shadow-glow">
                       {treasure.title}
                     </span>
-                    <h3 className="text-white font-bold text-lg">
+                    <h3 className="text-white font-bold text-lg drop-shadow-lg">
                       {treasure.subtitle}
                     </h3>
                   </div>
@@ -130,7 +145,7 @@ const AfricanTreasures = () => {
                         transition={{ duration: 0.4, delay: 0.5 + i * 0.05 }}
                         className="flex items-center gap-2 text-sm"
                       >
-                        <span className="w-1.5 h-1.5 rounded-full bg-gradient-primary shrink-0" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
                         {point}
                       </motion.li>
                     ))}
