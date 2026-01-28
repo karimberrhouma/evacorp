@@ -6,6 +6,7 @@ import FAQ from "@/components/FAQ";
 import ForumInscription from "@/components/ForumInscription";
 import Contact from "@/components/Contact";
 import Founder from "@/components/Founder";
+import News from "@/components/News";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -15,6 +16,7 @@ const Index = () => {
       <Hero />
       <Services />
       <AfricanTreasures />
+      <News />
       <ForumInscription />
       <Founder />
       <FAQ />
