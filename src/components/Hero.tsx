@@ -47,29 +47,29 @@ const Hero = () => {
           className="h-px bg-primary mx-auto mb-12"
         />
 
-        {/* Tagline */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="text-xs md:text-sm font-sans uppercase tracking-[0.3em] text-primary mb-8"
-        >
-          Agence d'organisation d'événements
-        </motion.p>
-
         {/* Logo */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.7 }}
-          className="mb-8"
+          transition={{ duration: 1, delay: 0.5 }}
+          className="mb-6"
         >
           <img
             src={evaLogo}
             alt="Eva Managing"
-            className="h-40 md:h-56 lg:h-72 w-auto mx-auto"
+            className="h-44 md:h-60 lg:h-80 w-auto mx-auto"
           />
         </motion.div>
+
+        {/* Tagline - Below logo */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.7 }}
+          className="text-sm md:text-base font-sans uppercase tracking-[0.3em] text-primary mb-12"
+        >
+          Agence d'organisation d'événements
+        </motion.p>
 
         {/* Main Title */}
         <motion.h1
