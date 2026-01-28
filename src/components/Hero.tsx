@@ -54,7 +54,7 @@ const Hero = () => {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="text-xs md:text-sm font-sans uppercase tracking-[0.3em] text-primary mb-8"
         >
-          Pavillon Africain • SIAL Canada 2026
+          Agence d'organisation d'événements
         </motion.p>
 
         {/* Logo */}
@@ -67,7 +67,7 @@ const Hero = () => {
           <img
             src={evaLogo}
             alt="Eva Managing"
-            className="h-28 md:h-40 lg:h-52 w-auto mx-auto"
+            className="h-40 md:h-56 lg:h-72 w-auto mx-auto"
           />
         </motion.div>
 
@@ -107,12 +107,14 @@ const Hero = () => {
           >
             Découvrir
           </button>
-          <button
-            onClick={() => scrollToSection("#inscription")}
+          <a
+            href="https://formulaires-eva.lovable.app/form/sial-canada-2026"
+            target="_blank"
+            rel="noopener noreferrer"
             className="btn-editorial-filled"
           >
-            Formulaire
-          </button>
+            Inscription
+          </a>
         </motion.div>
 
         {/* Decorative line */}

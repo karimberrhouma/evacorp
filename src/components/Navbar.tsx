@@ -8,7 +8,7 @@ const navLinks = [
   { name: "Accueil", href: "#home" },
   { name: "Services", href: "#services" },
   { name: "Événements", href: "#events" },
-  { name: "Formulaire", href: "#inscription" },
+  { name: "Inscription", href: "https://formulaires-eva.lovable.app/form/sial-canada-2026", external: true },
   { name: "Contact", href: "#contact" },
 ];
 
@@ -58,21 +58,29 @@ const Navbar = () => {
             />
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-10">
+          {/* Desktop Navigation - Centered */}
+          <div className="hidden lg:flex items-center gap-8">
             {navLinks.map((link) => (
-              <button
-                key={link.name}
-                onClick={() => scrollToSection(link.href)}
-                className="nav-editorial underline-editorial py-2"
-              >
-                {link.name}
-              </button>
+              link.external ? (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="nav-editorial underline-editorial py-2"
+                >
+                  {link.name}
+                </a>
+              ) : (
+                <button
+                  key={link.name}
+                  onClick={() => scrollToSection(link.href)}
+                  className="nav-editorial underline-editorial py-2"
+                >
+                  {link.name}
+                </button>
+              )
             ))}
-          </div>
-
-          {/* Admin Link */}
-          <div className="hidden lg:block">
             <Link
               to="/admin"
               className="nav-editorial underline-editorial py-2"
@@ -103,16 +111,32 @@ const Navbar = () => {
           >
             <div className="container mx-auto px-6 py-8 space-y-6">
               {navLinks.map((link, index) => (
-                <motion.button
-                  key={link.name}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  onClick={() => scrollToSection(link.href)}
-                  className="block w-full text-left nav-editorial py-2"
-                >
-                  {link.name}
-                </motion.button>
+                link.external ? (
+                  <motion.a
+                    key={link.name}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full text-left nav-editorial py-2"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {link.name}
+                  </motion.a>
+                ) : (
+                  <motion.button
+                    key={link.name}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    onClick={() => scrollToSection(link.href)}
+                    className="block w-full text-left nav-editorial py-2"
+                  >
+                    {link.name}
+                  </motion.button>
+                )
               ))}
               <Link
                 to="/admin"

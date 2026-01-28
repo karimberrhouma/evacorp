@@ -7,7 +7,7 @@ const ForumInscription = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-  const formUrl = "#";
+  const formUrl = "https://formulaires-eva.lovable.app/form/sial-canada-2026";
 
   const eventDetails = [
     { icon: Calendar, label: "Date", value: "Avril 2026" },
