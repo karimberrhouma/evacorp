@@ -35,11 +35,10 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-foreground text-background relative overflow-hidden">
-      {/* Decorative elements */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary rounded-full blur-3xl" />
+    <footer className="relative overflow-hidden border-t border-border/50">
+      {/* Background glow */}
+      <div className="absolute inset-0">
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/5 rounded-full blur-[150px]" />
       </div>
 
       <div className="container mx-auto px-4 lg:px-8 relative z-10">
@@ -49,19 +48,13 @@ const Footer = () => {
           <div className="lg:col-span-2">
             <motion.a
               href="/"
-              className="inline-flex items-center gap-3 mb-6"
+              className="inline-block mb-6"
               whileHover={{ scale: 1.02 }}
             >
-              <img src={evaLogo} alt="Eva Managing" className="h-12" />
-              <div>
-                <span className="font-space font-bold text-xl block">Eva Managing</span>
-                <span className="text-xs text-background/60">
-                  Agence d'organisation d'événements
-                </span>
-              </div>
+              <img src={evaLogo} alt="Eva Managing" className="h-16" />
             </motion.a>
             
-            <p className="text-background/70 mb-6 max-w-sm">
+            <p className="text-muted-foreground mb-6 max-w-sm">
               Le Pavillon Africain met en lumière l'expertise, le talent et 
               l'innovation africains au cœur du SIAL Canada.
             </p>
@@ -73,7 +66,7 @@ const Footer = () => {
                   key={social.label}
                   href={social.href}
                   whileHover={{ scale: 1.1, y: -2 }}
-                  className="w-10 h-10 rounded-xl bg-background/10 flex items-center justify-center hover:bg-gradient-primary transition-colors"
+                  className="w-10 h-10 rounded-xl glass border border-border/50 flex items-center justify-center hover:border-primary/50 hover:text-primary transition-all"
                   aria-label={social.label}
                 >
                   <social.icon size={18} />
@@ -90,7 +83,7 @@ const Footer = () => {
                 <li key={link.name}>
                   <a
                     href={link.href}
-                    className="text-background/70 hover:text-background transition-colors"
+                    className="text-muted-foreground hover:text-primary transition-colors"
                   >
                     {link.name}
                   </a>
@@ -106,7 +99,7 @@ const Footer = () => {
                 <li key={link.name}>
                   <a
                     href={link.href}
-                    className="text-background/70 hover:text-background transition-colors"
+                    className="text-muted-foreground hover:text-primary transition-colors"
                   >
                     {link.name}
                   </a>
@@ -122,7 +115,7 @@ const Footer = () => {
                 <li key={link.name}>
                   <a
                     href={link.href}
-                    className="text-background/70 hover:text-background transition-colors"
+                    className="text-muted-foreground hover:text-primary transition-colors"
                   >
                     {link.name}
                   </a>
@@ -133,8 +126,8 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="py-6 border-t border-background/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-background/60">
+        <div className="py-6 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} Eva Managing. Tous droits réservés.
           </p>
           
@@ -142,10 +135,10 @@ const Footer = () => {
             onClick={scrollToTop}
             whileHover={{ scale: 1.1, y: -2 }}
             whileTap={{ scale: 0.95 }}
-            className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center"
+            className="w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center shadow-glow"
             aria-label="Retour en haut"
           >
-            <ArrowUp size={18} />
+            <ArrowUp size={18} className="text-white" />
           </motion.button>
         </div>
       </div>

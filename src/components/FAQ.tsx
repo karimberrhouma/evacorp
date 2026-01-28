@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import { ChevronDown, HelpCircle } from "lucide-react";
+import { ChevronDown, HelpCircle, MessageCircle } from "lucide-react";
 
 const faqs = [
   {
@@ -36,11 +36,11 @@ const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section id="faq" className="section-padding bg-background relative overflow-hidden">
-      {/* Background decoration */}
+    <section id="faq" className="section-padding relative overflow-hidden">
+      {/* Background effects */}
       <div className="absolute inset-0">
-        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-secondary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-1/4 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[150px]" />
+        <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px]" />
       </div>
 
       <div className="container mx-auto px-4 lg:px-8 relative z-10" ref={ref}>
@@ -52,21 +52,27 @@ const FAQ = () => {
             transition={{ duration: 0.6 }}
             className="lg:sticky lg:top-32"
           >
-            <span className="inline-block text-sm font-medium text-primary tracking-wide uppercase mb-4">
-              FAQ
-            </span>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={isInView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass border border-primary/30 mb-6"
+            >
+              <MessageCircle className="w-4 h-4 text-primary" />
+              <span className="text-sm font-medium text-primary">FAQ</span>
+            </motion.div>
+            
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
               Questions{" "}
               <span className="text-gradient">fréquemment posées</span>
             </h2>
             <p className="text-lg text-muted-foreground mb-8">
-              Retrouvez les réponses aux questions les plus courantes sur nos services 
-              et notre approche.
+              Retrouvez les réponses aux questions les plus courantes sur nos services.
             </p>
 
             <motion.div
               whileHover={{ scale: 1.02 }}
-              className="inline-flex items-center gap-3 p-4 bg-gradient-primary text-white rounded-2xl"
+              className="inline-flex items-center gap-3 p-4 bg-gradient-primary text-white rounded-2xl shadow-glow"
             >
               <HelpCircle size={24} />
               <div>
@@ -89,7 +95,7 @@ const FAQ = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
-                className="card-modern overflow-hidden"
+                className="card-glow overflow-hidden"
               >
                 <button
                   onClick={() => setOpenIndex(openIndex === index ? null : index)}
@@ -99,7 +105,9 @@ const FAQ = () => {
                   <motion.div
                     animate={{ rotate: openIndex === index ? 180 : 0 }}
                     transition={{ duration: 0.3 }}
-                    className="shrink-0 w-8 h-8 rounded-full bg-muted flex items-center justify-center"
+                    className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                      openIndex === index ? "bg-gradient-primary text-white" : "bg-muted"
+                    }`}
                   >
                     <ChevronDown size={18} />
                   </motion.div>
