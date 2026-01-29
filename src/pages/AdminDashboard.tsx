@@ -192,13 +192,16 @@ const AdminDashboard = () => {
       const { error } = await supabase
         .from("news_items")
         .insert({
-          title: editingNews.title,
-          content: editingNews.content,
-          image_url: editingNews.image_url,
+          title,
+          content,
+          image_url: imageUrl,
           published_at: editingNews.published_at,
         });
 
       if (error) {
+        if (import.meta.env.DEV) {
+          console.error("Error creating news:", error);
+        }
         toast({
           title: "Erreur",
           description: "Impossible de créer l'actualité",
