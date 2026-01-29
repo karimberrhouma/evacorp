@@ -8,7 +8,8 @@ const navLinks = [
   { name: "Accueil", href: "#home" },
   { name: "Nos Services", href: "#services" },
   { name: "Nos Événements", href: "#events" },
-  { name: "Investir", href: "/investir", isRoute: true },
+  { name: "Qui sommes-nous", href: "/qui-sommes-nous", isRoute: true },
+  { name: "Investir", href: "https://formulaires-eva.lovable.app/form/sial-canada-2026", isExternal: true },
   { name: "Contact", href: "#contact" },
 ];
 
@@ -60,7 +61,17 @@ const Navbar = () => {
 
           <div className="hidden md:flex items-center gap-6 lg:gap-8">
             {navLinks.map((link) => (
-              link.isRoute ? (
+              link.isExternal ? (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="nav-editorial underline-editorial py-2"
+                >
+                  {link.name}
+                </a>
+              ) : link.isRoute ? (
                 <Link
                   key={link.name}
                   to={link.href}
@@ -78,14 +89,14 @@ const Navbar = () => {
                 </button>
               )
             ))}
-            <Link
-              to="https://formulaires-eva.lovable.app/form/sial-canada-2026"
+            <a
+              href="https://formulaires-eva.lovable.app/form/sial-canada-2026"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-primary text-primary-foreground px-6 py-2 font-sans text-sm tracking-wider hover:bg-primary/90 transition-colors"
             >
               Inscription
-            </Link>
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -109,7 +120,21 @@ const Navbar = () => {
           >
             <div className="container mx-auto px-6 py-8 space-y-6">
               {navLinks.map((link, index) => (
-                link.isRoute ? (
+                link.isExternal ? (
+                  <motion.a
+                    key={link.name}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full text-left nav-editorial py-2"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {link.name}
+                  </motion.a>
+                ) : link.isRoute ? (
                   <motion.div
                     key={link.name}
                     initial={{ opacity: 0, x: -20 }}
