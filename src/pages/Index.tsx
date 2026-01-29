@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import Countdown from "@/components/Countdown";
 import Services from "@/components/Services";
 import AfricanTreasures from "@/components/AfricanTreasures";
 import FAQ from "@/components/FAQ";
@@ -14,6 +15,7 @@ const Index = () => {
     <div className="min-h-screen">
       <Navbar />
       <Hero />
+      <Countdown />
       <Services />
       <AfricanTreasures />
       <News />
