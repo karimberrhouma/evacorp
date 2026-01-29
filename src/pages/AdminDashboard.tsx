@@ -75,7 +75,10 @@ const AdminDashboard = () => {
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Error fetching news:", error);
+      // Only log detailed errors in development mode
+      if (import.meta.env.DEV) {
+        console.error("Error fetching news:", error);
+      }
       toast({
         title: "Erreur",
         description: "Impossible de charger les actualités",
@@ -97,13 +100,62 @@ const AdminDashboard = () => {
   };
 
   const handleSaveNews = async () => {
-    if (!editingNews || !editingNews.title || !editingNews.content) {
+    if (!editingNews) return;
+
+    // Validate title
+    const title = editingNews.title?.trim();
+    if (!title) {
       toast({
         title: "Erreur",
-        description: "Veuillez remplir le titre et le contenu",
+        description: "Veuillez remplir le titre",
         variant: "destructive",
       });
       return;
+    }
+    if (title.length > 200) {
+      toast({
+        title: "Erreur",
+        description: "Le titre ne peut pas dépasser 200 caractères",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate content
+    const content = editingNews.content?.trim();
+    if (!content) {
+      toast({
+        title: "Erreur",
+        description: "Veuillez remplir le contenu",
+        variant: "destructive",
+      });
+      return;
+    }
+    if (content.length > 10000) {
+      toast({
+        title: "Erreur",
+        description: "Le contenu ne peut pas dépasser 10000 caractères",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Validate image URL if provided
+    const imageUrl = editingNews.image_url?.trim() || null;
+    if (imageUrl) {
+      try {
+        const url = new URL(imageUrl);
+        if (!['http:', 'https:'].includes(url.protocol)) {
+          throw new Error('Invalid protocol');
+        }
+      } catch {
+        toast({
+          title: "Erreur",
+          description: "L'URL de l'image n'est pas valide",
+          variant: "destructive",
+        });
+        return;
+      }
     }
 
     if (editingNews.id) {
@@ -111,14 +163,17 @@ const AdminDashboard = () => {
       const { error } = await supabase
         .from("news_items")
         .update({
-          title: editingNews.title,
-          content: editingNews.content,
-          image_url: editingNews.image_url,
+          title,
+          content,
+          image_url: imageUrl,
           published_at: editingNews.published_at,
         })
         .eq("id", editingNews.id);
 
       if (error) {
+        if (import.meta.env.DEV) {
+          console.error("Error updating news:", error);
+        }
         toast({
           title: "Erreur",
           description: "Impossible de mettre à jour l'actualité",
