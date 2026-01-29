@@ -1,3 +1,4 @@
+import React, { Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Countdown from "@/components/Countdown";
@@ -9,6 +10,7 @@ import Contact from "@/components/Contact";
 import Founder from "@/components/Founder";
 import News from "@/components/News";
 import Footer from "@/components/Footer";
+import QuiSommesNousSection from "@/components/QuiSommesNousSection";
 
 const Index = () => {
   return (
@@ -21,6 +23,7 @@ const Index = () => {
       <News />
       <ForumInscription />
       <Founder />
+      <QuiSommesNousSection />
       <FAQ />
       <Contact />
       <Footer />

@@ -100,7 +100,7 @@
 
   /* Editorial navigation */
   .nav-editorial {
-    @apply text-xs font-sans font-medium uppercase tracking-[0.2em] text-foreground/70 transition-colors duration-300 hover:text-primary;
+    @apply text-[10px] font-sans font-medium uppercase tracking-[0.15em] text-foreground/70 transition-colors duration-300 hover:text-primary;
   }
 
   /* Elegant underline animation */
