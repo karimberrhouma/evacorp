@@ -68,7 +68,7 @@ const Hero = () => {
           <img
             src={evaLogo}
             alt="Eva Managing"
-            className="h-40 md:h-52 lg:h-64 w-auto mx-auto"
+            className="h-48 md:h-60 lg:h-72 w-auto mx-auto"
           />
           <p className="text-xs md:text-sm font-sans tracking-[0.15em] text-primary mt-2">
             Agence d'organisation d'événements
@@ -130,24 +130,6 @@ const Hero = () => {
         />
       </div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 0.5 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="flex flex-col items-center gap-4"
-        >
-          <span className="text-xs font-sans uppercase tracking-[0.2em] text-foreground/50">
-            Scroll
-          </span>
-          <div className="w-px h-12 bg-gradient-to-b from-primary to-transparent" />
-        </motion.div>
-      </motion.div>
     </section>
   );
 };
