@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import evaLogo from "@/assets/eva-logo.png";
 import heroImage from "@/assets/hero-image.jpg";
+import forumVideo from "@/assets/forum-video.mp4";
 
 const Hero = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -21,20 +22,30 @@ const Hero = () => {
 
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image with Parallax */}
+      {/* Background Video with Parallax */}
       <motion.div 
         className="absolute inset-0"
-        style={{ y: scrollY * 0.5 }}
+        style={{ y: scrollY * 0.3 }}
       >
-        <img
-          src={heroImage}
-          alt="Eva Managing Event"
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
           className="w-full h-full object-cover"
-        />
+        >
+          <source src={forumVideo} type="video/mp4" />
+          {/* Fallback to image if video doesn't load */}
+          <img
+            src={heroImage}
+            alt="Eva Managing Event"
+            className="w-full h-full object-cover"
+          />
+        </video>
         {/* Dark overlay */}
-        <div className="absolute inset-0 bg-background/70" />
+        <div className="absolute inset-0 bg-background/75" />
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-transparent to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-transparent to-background" />
       </motion.div>
 
       {/* Content */}
