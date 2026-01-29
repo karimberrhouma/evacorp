@@ -1,16 +1,46 @@
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import evaLogo from "@/assets/eva-logo.png";
 import heroImage from "@/assets/hero-image.jpg";
 import forumVideo from "@/assets/forum-video.mp4";
 
 const Hero = () => {
   const [scrollY, setScrollY] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Robust autoplay handling for all browsers
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const attemptAutoplay = async () => {
+      try {
+        // Ensure video is muted (required for autoplay)
+        video.muted = true;
+        await video.play();
+      } catch (error) {
+        console.log("Autoplay blocked, retrying...");
+        // Retry with user interaction simulation
+        video.muted = true;
+        video.play().catch(() => {
+          console.log("Video autoplay failed");
+        });
+      }
+    };
+
+    // Wait for video to be ready
+    if (video.readyState >= 2) {
+      attemptAutoplay();
+    } else {
+      video.addEventListener("loadeddata", attemptAutoplay);
+      return () => video.removeEventListener("loadeddata", attemptAutoplay);
+    }
   }, []);
 
   const scrollToSection = (href: string) => {
@@ -28,19 +58,16 @@ const Hero = () => {
         style={{ y: scrollY * 0.3 }}
       >
         <video
+          ref={videoRef}
           autoPlay
           muted
           loop
           playsInline
+          preload="auto"
+          poster={heroImage}
           className="w-full h-full object-cover"
         >
           <source src={forumVideo} type="video/mp4" />
-          {/* Fallback to image if video doesn't load */}
-          <img
-            src={heroImage}
-            alt="Eva Managing Event"
-            className="w-full h-full object-cover"
-          />
         </video>
         {/* Dark overlay */}
         <div className="absolute inset-0 bg-background/75" />
