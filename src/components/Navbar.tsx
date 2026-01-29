@@ -58,7 +58,7 @@ const Navbar = () => {
             />
           </Link>
 
-          <div className="hidden lg:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-6 lg:gap-8">
             {navLinks.map((link) => (
               link.isRoute ? (
                 <Link
@@ -91,7 +91,7 @@ const Navbar = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden p-2 text-foreground"
+            className="md:hidden p-2 text-foreground"
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -105,7 +105,7 @@ const Navbar = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="lg:hidden absolute top-full left-0 right-0 bg-background border-b border-border"
+            className="md:hidden absolute top-full left-0 right-0 bg-background border-b border-border"
           >
             <div className="container mx-auto px-6 py-8 space-y-6">
               {navLinks.map((link, index) => (
