@@ -32,8 +32,11 @@ const OurEvents = () => {
   };
 
   return (
-    <section id="events" className="section-padding bg-card relative" ref={ref}>
-      <div className="container mx-auto px-6 lg:px-12">
+    <section id="events" className="section-padding bg-background relative" ref={ref}>
+      {/* Darker background overlay */}
+      <div className="absolute inset-0 bg-black/40" />
+      
+      <div className="container mx-auto px-6 lg:px-12 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-20">
           <motion.div
@@ -56,7 +59,7 @@ const OurEvents = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="font-display text-3xl md:text-5xl lg:text-6xl text-foreground mb-6"
+            className="font-serif text-3xl md:text-5xl lg:text-6xl text-foreground mb-6"
           >
             Nos
             <br />
@@ -64,7 +67,7 @@ const OurEvents = () => {
           </motion.h2>
         </div>
 
-        {/* Events Grid - 3 affiches côte à côte */}
+        {/* Events Grid - 3 affiches côte à côte avec même taille */}
         <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
           {events.map((event, index) => (
             <motion.div
@@ -75,19 +78,19 @@ const OurEvents = () => {
               onClick={() => handleEventClick(event.pdfUrl)}
               className="group cursor-pointer"
             >
-              {/* Image Container */}
-              <div className="relative overflow-hidden border border-border/30 hover:border-primary/50 transition-all duration-500">
-                <motion.img
+              {/* Image Container - Fixed aspect ratio for equal sizing */}
+              <div className="relative overflow-hidden border border-border/30 hover:border-primary/50 transition-all duration-500 aspect-[4/5]">
+                <img
                   src={event.image}
                   alt={event.title}
-                  className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-background/20 group-hover:bg-background/0 transition-colors duration-500" />
                 
                 {/* Hover overlay - click indicator */}
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                   <div className="w-16 h-16 border-2 border-primary bg-background/80 flex items-center justify-center">
-                    <span className="text-primary font-display text-sm uppercase tracking-wider">Voir</span>
+                    <span className="text-primary font-serif text-sm uppercase tracking-wider">Voir</span>
                   </div>
                 </div>
               </div>
