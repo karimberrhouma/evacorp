@@ -88,34 +88,20 @@ const ForumInscription = () => {
             ))}
           </motion.div>
 
-          {/* Form Placeholder */}
+          {/* Simple CTA Button */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.8 }}
-            className="border border-border/30 p-12 text-center"
+            className="text-center"
           >
-            <h3 className="font-serif text-2xl text-foreground mb-4">
-              Formulaire d'inscription
-            </h3>
-            <p className="font-sans text-sm text-foreground/60 mb-8">
-              Le formulaire sera disponible prochainement.
-            </p>
-            
-            {/* Placeholder */}
-            <div className="border-2 border-dashed border-border/50 p-12 mb-8">
-              <p className="font-sans text-sm text-foreground/40">
-                Espace réservé pour le formulaire
-              </p>
-            </div>
-
             <a
               href={formUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-editorial-filled"
+              className="btn-editorial-filled text-lg px-12 py-4"
             >
-              Accéder au formulaire
+              S'inscrire
             </a>
           </motion.div>
         </div>
