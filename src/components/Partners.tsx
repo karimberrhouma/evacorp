@@ -1,23 +1,24 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import partnersImage from "@/assets/partners/nos-partenaires.png";
 
-// Individual partner logos extracted from the image
+// Import partner logos
+import idGatineau from "@/assets/partners/id-gatineau.jpg";
+import ccng from "@/assets/partners/ccng.png";
+import apcm from "@/assets/partners/apcm.jpeg";
+import radioMaweja from "@/assets/partners/radio-maweja.png";
+import risq from "@/assets/partners/risq.png";
+import conseilArts from "@/assets/partners/conseil-arts.png";
+import sme from "@/assets/partners/sme.jpg";
+
 const partnerLogos = [
-  { name: "ID Gatineau", id: 1 },
-  { name: "Radio Maweja", id: 2 },
-  { name: "Conseil des arts du Canada", id: 3 },
-  { name: "RISQ", id: 4 },
-  { name: "SME", id: 5 },
-  { name: "Infos 243", id: 6 },
-  { name: "Congolese Women Network", id: 7 },
-  { name: "CCNG", id: 8 },
-  { name: "Tourisme Québec", id: 9 },
-  { name: "APCM", id: 10 },
-  { name: "ABI", id: 11 },
-  { name: "RECC", id: 12 },
-  { name: "CCRCC", id: 13 },
+  { name: "ID Gatineau", logo: idGatineau },
+  { name: "CCNG", logo: ccng },
+  { name: "APCM", logo: apcm },
+  { name: "Radio Maweja", logo: radioMaweja },
+  { name: "RISQ", logo: risq },
+  { name: "Conseil des arts du Canada", logo: conseilArts },
+  { name: "SME", logo: sme },
 ];
 
 const Partners = () => {
@@ -77,55 +78,44 @@ const Partners = () => {
                 x: {
                   repeat: Infinity,
                   repeatType: "loop",
-                  duration: 40,
+                  duration: 25,
                   ease: "linear",
                 },
               }}
               className="flex items-center"
             >
               {/* First set of logos */}
-              {partnerLogos.map((partner) => (
+              {partnerLogos.map((partner, index) => (
                 <div
-                  key={`first-${partner.id}`}
-                  className="flex-shrink-0 mx-12 flex items-center justify-center"
+                  key={`first-${index}`}
+                  className="flex-shrink-0 mx-8 flex items-center justify-center"
                 >
-                  <div className="bg-foreground/95 rounded-lg px-8 py-6 shadow-lg hover:shadow-xl transition-shadow duration-300 min-w-[180px] h-[100px] flex items-center justify-center">
-                    <span className="text-background font-sans font-semibold text-sm text-center">
-                      {partner.name}
-                    </span>
+                  <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 h-[120px] w-[220px] flex items-center justify-center">
+                    <img 
+                      src={partner.logo} 
+                      alt={partner.name}
+                      className="max-h-[90px] max-w-[180px] object-contain"
+                    />
                   </div>
                 </div>
               ))}
               {/* Duplicate set for seamless loop */}
-              {partnerLogos.map((partner) => (
+              {partnerLogos.map((partner, index) => (
                 <div
-                  key={`second-${partner.id}`}
-                  className="flex-shrink-0 mx-12 flex items-center justify-center"
+                  key={`second-${index}`}
+                  className="flex-shrink-0 mx-8 flex items-center justify-center"
                 >
-                  <div className="bg-foreground/95 rounded-lg px-8 py-6 shadow-lg hover:shadow-xl transition-shadow duration-300 min-w-[180px] h-[100px] flex items-center justify-center">
-                    <span className="text-background font-sans font-semibold text-sm text-center">
-                      {partner.name}
-                    </span>
+                  <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 h-[120px] w-[220px] flex items-center justify-center">
+                    <img 
+                      src={partner.logo} 
+                      alt={partner.name}
+                      className="max-h-[90px] max-w-[180px] object-contain"
+                    />
                   </div>
                 </div>
               ))}
             </motion.div>
           </div>
-        </motion.div>
-
-        {/* Alternative: Show actual partner image with individual crop simulation */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.7 }}
-          className="mt-12 flex justify-center"
-        >
-          <img 
-            src={partnersImage} 
-            alt="Nos partenaires" 
-            className="max-w-full h-auto object-contain opacity-90"
-            style={{ maxHeight: '200px' }}
-          />
         </motion.div>
 
         {/* Decorative line */}
