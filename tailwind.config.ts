@@ -16,6 +16,7 @@ export default {
       fontFamily: {
         serif: ["Cormorant Garamond", "Georgia", "serif"],
         sans: ["Montserrat", "system-ui", "sans-serif"],
+        display: ["DM Sans", "Montserrat", "system-ui", "sans-serif"],
       },
       letterSpacing: {
         widest: "0.2em",
