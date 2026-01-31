@@ -68,7 +68,7 @@ const OurEvents = () => {
         </div>
 
         {/* Events Grid - 3 affiches côte à côte avec même taille */}
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
           {events.map((event, index) => (
             <motion.div
               key={event.title}
@@ -76,19 +76,19 @@ const OurEvents = () => {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.4 + index * 0.2 }}
               onClick={() => handleEventClick(event.pdfUrl)}
-              className="group cursor-pointer"
+              className="group cursor-pointer flex"
             >
-              {/* Image Container - Fixed aspect ratio for equal sizing */}
-              <div className="relative overflow-hidden border border-border/30 hover:border-primary/50 transition-all duration-500 aspect-[4/5]">
+              {/* Image Container - Fixed height, object-contain for full image display */}
+              <div className="relative overflow-hidden border border-border/30 hover:border-primary/50 transition-all duration-500 w-full bg-muted/50 flex items-center justify-center" style={{ minHeight: '400px' }}>
                 <img
                   src={event.image}
                   alt={event.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105 max-h-[500px]"
                 />
-                <div className="absolute inset-0 bg-background/20 group-hover:bg-background/0 transition-colors duration-500" />
+                <div className="absolute inset-0 bg-background/10 group-hover:bg-background/0 transition-colors duration-500 pointer-events-none" />
                 
                 {/* Hover overlay - click indicator */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
                   <div className="w-16 h-16 border-2 border-primary bg-background/80 flex items-center justify-center">
                     <span className="text-primary font-serif text-sm uppercase tracking-wider">Voir</span>
                   </div>
