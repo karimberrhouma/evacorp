@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import evaLogo from "@/assets/eva-logo.png";
+import logoForm from "@/assets/logo-form.png";
 
 const navLinks = [
   { name: "Accueil", href: "#home" },
@@ -47,11 +48,9 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-6 lg:px-12">
         <div className="flex items-center justify-between">
-          {/* Maple Leaf Canadian Touch */}
-          <div className="hidden md:flex items-center gap-1">
-            <svg viewBox="0 0 512 512" className="w-5 h-5 text-primary/60" fill="currentColor">
-              <path d="M383.8 351.7c2.5-2.5 105.2-92.4 105.2-92.4l-17.5-7.5c-10-4.9-7.4-11.5-5-17.4 2.4-7.6 20.1-67.3 20.1-67.3l-26.5 9.9c-6.4 2.4-11.4-1.5-12.4-6.4-.5-3.5 1-8.4 1-8.4s65.6-56.9 65.6-56.9l-31.4-4.9c-9.9-1-10.9-7.9-10.4-12.4.5-4.4 17.5-60.8 17.5-60.8l-25.1 14.9c-8.4 5.9-14.4 0-16.4-4.9l-12.4-39.8-31.4 49.8c-5.9 9.9-14.4 5.9-18.4.5l-32.8-42.8 12.4 73.2c1.5 9.9-5.9 13.4-12.4 11.9l-28.9-8.4 9.9 58.8c1 5.9-4.4 10.4-9.9 10.4H256c-5.5 0-10.9-4.5-9.9-10.4l9.9-58.8-28.9 8.4c-6.5 1.5-13.9-2-12.4-11.9l12.4-73.2-32.8 42.8c-4 5.4-12.5 9.4-18.4-.5L145 59.3l-12.4 39.8c-2 4.9-8 10.8-16.4 4.9l-25.1-14.9s17 56.4 17.5 60.8c.5 4.5-.5 11.4-10.4 12.4l-31.4 4.9s65.6 56.9 65.6 56.9 1.5 4.9 1 8.4c-1 4.9-6 8.8-12.4 6.4l-26.5-9.9s17.7 59.7 20.1 67.3c2.4 5.9 5 12.5-5 17.4L91.5 259.3s102.7 89.9 105.2 92.4c1.9 2.5 4.9 7.4 2.5 12.4-2.5 5-9.4 24.4-9.4 24.4s52.3-25.9 58.3-28.9c5.9-3 10.4.5 11.4 5.4 0 0 5.4 41.8 6.9 50.3.5 4.9 3.5 9.4 10.4 9.4h25.6c6.9 0 9.9-4.5 10.4-9.4 1.5-8.5 6.9-50.3 6.9-50.3 1-4.9 5.5-8.4 11.4-5.4 6 3 58.3 28.9 58.3 28.9s-6.9-19.4-9.4-24.4c-2.4-5 .6-9.9 2.5-12.4z"/>
-            </svg>
+          {/* Logo à côté du menu */}
+          <div className="hidden md:flex items-center">
+            <img src={logoForm} alt="Logo" className="h-8 w-auto" />
           </div>
 
           <div className="hidden md:flex items-center gap-5 lg:gap-6">

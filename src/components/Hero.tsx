@@ -95,7 +95,7 @@ const Hero = () => {
           <img
             src={evaLogo}
             alt="Eva Managing"
-            className="h-48 md:h-60 lg:h-72 w-auto mx-auto"
+            className="h-56 md:h-72 lg:h-96 w-auto mx-auto"
           />
           <p className="text-xs md:text-sm font-sans tracking-[0.15em] text-primary mt-2">
             Agence d'organisation d'événements
