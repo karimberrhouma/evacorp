@@ -3,7 +3,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Countdown from "@/components/Countdown";
 import Services from "@/components/Services";
-import AfricanTreasures from "@/components/AfricanTreasures";
+import OurEvents from "@/components/OurEvents";
 import FAQ from "@/components/FAQ";
 import ForumInscription from "@/components/ForumInscription";
 import Contact from "@/components/Contact";
@@ -11,6 +11,7 @@ import Founder from "@/components/Founder";
 import News from "@/components/News";
 import Footer from "@/components/Footer";
 import QuiSommesNousSection from "@/components/QuiSommesNousSection";
+import Partners from "@/components/Partners";
 
 const Index = () => {
   return (
@@ -19,13 +20,14 @@ const Index = () => {
       <Hero />
       <Countdown />
       <Services />
-      <AfricanTreasures />
+      <OurEvents />
       <News />
       <ForumInscription />
       <Founder />
       <QuiSommesNousSection />
       <FAQ />
       <Contact />
+      <Partners />
       <Footer />
     </div>
   );
