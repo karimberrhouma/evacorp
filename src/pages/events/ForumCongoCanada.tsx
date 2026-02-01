@@ -5,8 +5,6 @@ import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PageLoader from "@/components/PageLoader";
-import forumImage from "@/assets/events/forum-congo-canada.jpg";
-
 const ForumCongoCanada = () => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -52,14 +50,9 @@ const ForumCongoCanada = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       
-      {/* Hero Section */}
-      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0">
-          <img src={forumImage} alt="Forum Congo Canada" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
-        </div>
-        
-        <div className="container mx-auto px-6 relative z-10 text-center pt-32">
+      {/* Hero Section - Text only */}
+      <section className="relative pt-32 pb-20 bg-muted/30">
+        <div className="container mx-auto px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
