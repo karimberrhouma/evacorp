@@ -1,34 +1,48 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import forumCongoCanada from "@/assets/events/forum-congo-canada.jpg";
 import forumEconomique from "@/assets/events/forum-economique.jpg";
 import sialMission from "@/assets/events/sial-mission.jpg";
+import francophonie from "@/assets/events/francophonie.jpg";
+import siitac from "@/assets/events/siitac.jpg";
 
 const events = [
   {
     title: "Forum Congo Canada",
     image: forumCongoCanada,
-    pdfUrl: "/pdfs/forum-congo-canada.pdf",
+    route: "/evenements/forum-congo-canada",
   },
   {
     title: "Forum Économique Afrique Centrale",
     image: forumEconomique,
-    pdfUrl: "/pdfs/forum-economique.pdf",
+    route: "/evenements/forum-economique",
   },
   {
-    title: "Mission Tunisie Canada - SIAL",
+    title: "Mission SIAL Canada",
     image: sialMission,
-    pdfUrl: "/pdfs/sial-mission.pptx",
+    route: "/evenements/sial-mission",
+  },
+  {
+    title: "Rendez-vous Francophonie",
+    image: francophonie,
+    route: "/evenements/francophonie",
+  },
+  {
+    title: "SIITAC Cameroun",
+    image: siitac,
+    route: "/evenements/siitac",
   },
 ];
 
 const OurEvents = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const navigate = useNavigate();
 
-  const handleEventClick = (pdfUrl: string) => {
-    window.open(pdfUrl, "_blank");
+  const handleEventClick = (route: string) => {
+    navigate(route);
   };
 
   return (
@@ -67,30 +81,30 @@ const OurEvents = () => {
           </motion.h2>
         </div>
 
-        {/* Events Grid - 3 affiches côte à côte avec même taille */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
+        {/* Events Grid - 5 affiches responsive */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 lg:gap-6 items-stretch">
           {events.map((event, index) => (
             <motion.div
               key={event.title}
               initial={{ opacity: 0, y: 50 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.4 + index * 0.2 }}
-              onClick={() => handleEventClick(event.pdfUrl)}
+              transition={{ duration: 0.8, delay: 0.4 + index * 0.1 }}
+              onClick={() => handleEventClick(event.route)}
               className="group cursor-pointer flex"
             >
               {/* Image Container - Fixed height, object-contain for full image display */}
-              <div className="relative overflow-hidden border border-border/30 hover:border-primary/50 transition-all duration-500 w-full bg-muted/50 flex items-center justify-center" style={{ minHeight: '400px' }}>
+              <div className="relative overflow-hidden border border-border/30 hover:border-primary/50 transition-all duration-500 w-full bg-muted/50 flex items-center justify-center" style={{ minHeight: '300px' }}>
                 <img
                   src={event.image}
                   alt={event.title}
-                  className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105 max-h-[500px]"
+                  className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105 max-h-[380px]"
                 />
                 <div className="absolute inset-0 bg-background/10 group-hover:bg-background/0 transition-colors duration-500 pointer-events-none" />
                 
                 {/* Hover overlay - click indicator */}
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                  <div className="w-16 h-16 border-2 border-primary bg-background/80 flex items-center justify-center">
-                    <span className="text-primary font-serif text-sm uppercase tracking-wider">Voir</span>
+                  <div className="w-14 h-14 border-2 border-primary bg-background/80 flex items-center justify-center">
+                    <span className="text-primary font-serif text-xs uppercase tracking-wider">Voir</span>
                   </div>
                 </div>
               </div>
