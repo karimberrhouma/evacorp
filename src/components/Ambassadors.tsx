@@ -8,8 +8,10 @@ import camerounAgathe from "@/assets/ambassadors/cameroun-agathe.jpg";
 import camerounAbdel from "@/assets/ambassadors/cameroun-abdel.jpg";
 import franceNatacha from "@/assets/ambassadors/france-natacha.jpg";
 import tchad from "@/assets/ambassadors/tchad.jpg";
+import tunisieJamel from "@/assets/ambassadors/tunisie-jamel.jpg";
 
 const ambassadors = [
+  { name: "Jamel Ferjani", country: "Tunisie", image: tunisieJamel },
   { name: "Mme. Nanga Agathe", country: "Cameroun", image: camerounAgathe },
   { name: "M. Landry R. Noutchang", country: "Cameroun", image: camerounLandry },
   { name: "Mme. Carine Kamlo", country: "Cameroun", image: camerounCarine },
@@ -43,7 +45,7 @@ const Ambassadors = () => {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-9 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-5 gap-4">
           {ambassadors.map((ambassador, index) => (
             <motion.div
               key={ambassador.name + ambassador.country}
