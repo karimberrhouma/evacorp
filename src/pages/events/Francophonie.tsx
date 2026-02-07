@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PageLoader from "@/components/PageLoader";
+import Ambassadors from "@/components/Ambassadors";
 const Francophonie = () => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -250,6 +251,7 @@ const Francophonie = () => {
         </div>
       </section>
 
+      <Ambassadors />
       <Footer />
     </div>
   );

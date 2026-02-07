@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PageLoader from "@/components/PageLoader";
+import Ambassadors from "@/components/Ambassadors";
 const ForumEconomique = () => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -232,6 +233,7 @@ const ForumEconomique = () => {
         </div>
       </section>
 
+      <Ambassadors />
       <Footer />
     </div>
   );
