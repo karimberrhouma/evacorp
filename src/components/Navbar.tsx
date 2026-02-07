@@ -50,7 +50,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between">
           {/* Logo à côté du menu */}
           <div className="hidden md:flex items-center">
-            <img src={logoForm} alt="Logo" className="h-8 w-auto" />
+            <img src={logoForm} alt="Logo" className="h-14 w-auto" />
           </div>
 
           <div className="hidden md:flex items-center gap-5 lg:gap-6">

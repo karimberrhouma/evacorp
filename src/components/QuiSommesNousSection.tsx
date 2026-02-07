@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Building2, Plane, MessageSquare } from "lucide-react";
+import { Building2, Plane, MessageSquare, User } from "lucide-react";
 
 const entities = [
   {
@@ -17,6 +17,14 @@ const entities = [
     icon: MessageSquare,
     description: "Agence de communication et de marketing digital. Nous développons votre visibilité et votre image de marque à l'échelle internationale.",
   },
+];
+
+const teamMembers = [
+  { name: "Membre 1", role: "À définir" },
+  { name: "Membre 2", role: "À définir" },
+  { name: "Membre 3", role: "À définir" },
+  { name: "Membre 4", role: "À définir" },
+  { name: "Membre 5", role: "À définir" },
 ];
 
 const QuiSommesNousSection = () => {
@@ -56,6 +64,41 @@ const QuiSommesNousSection = () => {
           <p className="font-sans text-sm text-foreground/60 max-w-2xl mx-auto">
             Un groupe canadien dédié à l'excellence dans l'événementiel, le voyage et la communication
           </p>
+        </motion.div>
+
+        {/* Team Members */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="mb-20"
+        >
+          <h3 className="font-serif text-2xl md:text-3xl text-center text-foreground mb-12">
+            Notre <span className="italic text-primary">Équipe</span>
+          </h3>
+          <div className="flex flex-wrap justify-center gap-8 md:gap-12">
+            {teamMembers.map((member, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="text-center group"
+              >
+                <div className="w-28 h-28 md:w-36 md:h-36 mx-auto mb-4 rounded-full border-2 border-border/30 group-hover:border-primary/50 transition-colors bg-muted/50 flex items-center justify-center overflow-hidden">
+                  <User className="w-12 h-12 text-foreground/20" />
+                </div>
+                <h4 className="font-serif text-sm md:text-base text-foreground mb-1">
+                  {member.name}
+                </h4>
+                <p className="text-xs text-primary uppercase tracking-wider">
+                  {member.role}
+                </p>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
 
         {/* Entities Grid */}

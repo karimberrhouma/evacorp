@@ -41,7 +41,7 @@ const Founder = () => {
             <div className="w-40 h-40 md:w-52 md:h-52 mx-auto rounded-full overflow-hidden border-4 border-primary/30 shadow-2xl">
               <img
                 src={founderPhoto}
-                alt="Jalel Ferjani - Fondateur d'Eva Managing"
+                alt="Jamel Ferjani - Fondateur d'Eva Managing"
                 className="w-full h-full object-cover object-top"
               />
             </div>
@@ -54,7 +54,7 @@ const Founder = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="font-serif text-2xl md:text-3xl text-foreground mb-2"
           >
-            Jalel Ferjani
+            Jamel Ferjani
           </motion.h3>
 
           {/* Title */}
@@ -75,7 +75,7 @@ const Founder = () => {
             className="font-sans text-foreground/70 max-w-2xl mx-auto leading-relaxed"
           >
             Fort d'une expertise de plus de 20 ans dans l'organisation d'événements 
-            internationaux, Jalel Ferjani a fondé Eva Managing avec une vision claire : 
+            internationaux, Jamel Ferjani a fondé Eva Managing avec une vision claire : 
             créer des ponts entre l'Afrique et le monde à travers des événements 
             d'exception. Sa passion pour l'excellence et son engagement envers 
             l'authenticité africaine font d'Eva Managing une référence dans le secteur.

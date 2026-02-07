@@ -32,7 +32,7 @@ const Footer = () => {
             whileHover={{ scale: 1.02 }}
             className="mb-8"
           >
-            <img src={evaLogo} alt="Eva Managing" className="h-16" />
+            <img src={evaLogo} alt="Eva Managing" className="h-24" />
           </motion.a>
 
           {/* Navigation */}
