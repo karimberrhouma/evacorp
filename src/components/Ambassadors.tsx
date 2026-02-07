@@ -4,11 +4,17 @@ import niger from "@/assets/ambassadors/niger.jpg";
 import madagascar from "@/assets/ambassadors/madagascar.jpg";
 import camerounLandry from "@/assets/ambassadors/cameroun-landry.jpg";
 import camerounCarine from "@/assets/ambassadors/cameroun-carine.jpg";
+import camerounAgathe from "@/assets/ambassadors/cameroun-agathe.jpg";
+import camerounAbdel from "@/assets/ambassadors/cameroun-abdel.jpg";
+import franceNatacha from "@/assets/ambassadors/france-natacha.jpg";
 import tchad from "@/assets/ambassadors/tchad.jpg";
 
 const ambassadors = [
+  { name: "Mme. Nanga Agathe", country: "Cameroun", image: camerounAgathe },
   { name: "M. Landry R. Noutchang", country: "Cameroun", image: camerounLandry },
   { name: "Mme. Carine Kamlo", country: "Cameroun", image: camerounCarine },
+  { name: "M. Maitre Abdel", country: "Cameroun", image: camerounAbdel },
+  { name: "Mme. Tsiory Raharitsimba Natacha", country: "France", image: franceNatacha },
   { name: "M. Kalembo Liéon", country: "Madagascar", image: madagascar },
   { name: "M. Peter Ami Liéon", country: "Niger", image: niger },
   { name: "M. Chouaib Colibali", country: "Tchad", image: tchad },
@@ -17,13 +23,13 @@ const ambassadors = [
 
 const Ambassadors = () => {
   return (
-    <section className="py-20 bg-muted/30">
+    <section className="py-12 bg-muted/30">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-10"
         >
           <div className="flex items-center justify-center gap-3 mb-6">
             <div className="w-12 h-px bg-primary" />
@@ -37,7 +43,7 @@ const Ambassadors = () => {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+        <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-9 gap-4">
           {ambassadors.map((ambassador, index) => (
             <motion.div
               key={ambassador.name + ambassador.country}
