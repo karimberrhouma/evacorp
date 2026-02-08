@@ -7,6 +7,8 @@ import forumEconomique from "@/assets/events/forum-economique.jpg";
 import sialMission from "@/assets/events/sial-mission.jpg";
 import francophonie from "@/assets/events/francophonie.jpg";
 import siitac from "@/assets/events/siitac.jpg";
+import mtlConnecte from "@/assets/events/mtl-connecte.jpg";
+import allInAi from "@/assets/events/all-in-ai.jpg";
 
 const events = [
   {
@@ -33,6 +35,16 @@ const events = [
     title: "SIITAC Cameroun",
     image: siitac,
     route: "/evenements/siitac",
+  },
+  {
+    title: "MTL Connecte",
+    image: mtlConnecte,
+    route: "/evenements/mtl-connecte",
+  },
+  {
+    title: "ALL IN AI",
+    image: allInAi,
+    route: "/evenements/all-in-ai",
   },
 ];
 
@@ -82,7 +94,7 @@ const OurEvents = () => {
         </div>
 
         {/* Events Grid - 5 affiches responsive */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 lg:gap-6 items-stretch">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6 items-stretch">
           {events.map((event, index) => (
             <motion.div
               key={event.title}
