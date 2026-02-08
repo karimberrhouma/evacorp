@@ -14,6 +14,8 @@ import ForumEconomique from "./pages/events/ForumEconomique";
 import SialMission from "./pages/events/SialMission";
 import Francophonie from "./pages/events/Francophonie";
 import Siitac from "./pages/events/Siitac";
+import MtlConnecte from "./pages/events/MtlConnecte";
+import AllInAi from "./pages/events/AllInAi";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +36,8 @@ const App = () => (
           <Route path="/evenements/sial-mission" element={<SialMission />} />
           <Route path="/evenements/francophonie" element={<Francophonie />} />
           <Route path="/evenements/siitac" element={<Siitac />} />
+          <Route path="/evenements/mtl-connecte" element={<MtlConnecte />} />
+          <Route path="/evenements/all-in-ai" element={<AllInAi />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
